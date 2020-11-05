@@ -273,17 +273,23 @@
                     </el-col>
                 </el-row>
                 <el-row>
+                    <!--                    <el-col :span="12">-->
+                    <!--                        <el-form-item label="岗位">-->
+                    <!--                            <el-select v-model="form.postIds" multiple placeholder="请选择">-->
+                    <!--                                <el-option-->
+                    <!--                                    v-for="item in postOptions"-->
+                    <!--                                    :key="item.postId"-->
+                    <!--                                    :label="item.postName"-->
+                    <!--                                    :value="item.postId"-->
+                    <!--                                    :disabled="item.status == 1"-->
+                    <!--                                ></el-option>-->
+                    <!--                            </el-select>-->
+                    <!--                        </el-form-item>-->
+                    <!--                    </el-col>-->
                     <el-col :span="12">
-                        <el-form-item label="岗位">
-                            <el-select v-model="form.postIds" multiple placeholder="请选择">
-                                <el-option
-                                    v-for="item in postOptions"
-                                    :key="item.postId"
-                                    :label="item.postName"
-                                    :value="item.postId"
-                                    :disabled="item.status == 1"
-                                ></el-option>
-                            </el-select>
+                        <el-form-item label="编码" prop="userId">
+                            <el-input v-model.number="form.userId" placeholder="请输入编码" maxlength="11"
+                                      :disabled="!createFlag"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -294,7 +300,7 @@
                                     :key="item.roleId"
                                     :label="item.roleName"
                                     :value="item.roleId"
-                                    :disabled="item.status == 1"
+                                    :disabled="item.status === 1"
                                 ></el-option>
                             </el-select>
                         </el-form-item>
@@ -394,6 +400,8 @@ export default {
             postOptions: [],
             // 角色选项
             roleOptions: [],
+            createFlag: true,
+
             // 表单参数
             form: {},
             defaultProps: {
@@ -453,7 +461,10 @@ export default {
                         message: "请输入正确的手机号码",
                         trigger: "blur"
                     }
-                ]
+                ],
+                userId: [
+                    {required: true, message: "请输入数字", trigger: "blur", type: "number"}
+                ],
             }
         };
     },
@@ -555,12 +566,13 @@ export default {
         // 多选框选中数据
         handleSelectionChange(selection) {
             this.ids = selection.map(item => item.userId);
-            this.single = selection.length != 1;
+            this.single = selection.length !== 1;
             this.multiple = !selection.length;
         },
         /** 新增按钮操作 */
         handleAdd() {
             this.reset();
+            this.createFlag = true;
             this.getTreeselect();
             getUser().then(response => {
                 this.postOptions = response.posts;
@@ -573,6 +585,7 @@ export default {
         /** 修改按钮操作 */
         handleUpdate(row) {
             this.reset();
+            this.createFlag = false;
             this.getTreeselect();
             const userId = row.userId || this.ids;
             getUser(userId).then(response => {
@@ -602,7 +615,8 @@ export default {
         submitForm: function () {
             this.$refs["form"].validate(valid => {
                 if (valid) {
-                    if (this.form.userId != undefined) {
+                    this.form.createFlag = this.createFlag;
+                    if (!this.createFlag) {
                         updateUser(this.form).then(response => {
                             this.msgSuccess("修改成功");
                             this.open = false;
