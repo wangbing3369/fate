@@ -15,9 +15,12 @@
         ruoyi-api-system系统接口模块
     </description>
 
-    <dependencies>
-
-        <!-- RuoYi Common Core-->
+    <dependencies><!-- RuoYi Common Core-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.16</version>
+        </dependency>
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-common-core</artifactId>

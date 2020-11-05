@@ -164,6 +164,11 @@ public class SysDeptServiceImpl implements ISysDeptService {
      */
     @Override
     public int insertDept(SysDept dept) {
+        // 判断ID是否已存在
+        if (this.deptMapper.selectDeptById(dept.getDeptId()) != null) {
+            throw new CustomException("部门编码已存在");
+        }
+
         SysDept info = deptMapper.selectDeptById(dept.getParentId());
         // 如果父节点不为正常状态,则不允许新增子节点
         if (!UserConstants.DEPT_NORMAL.equals(info.getStatus())) {

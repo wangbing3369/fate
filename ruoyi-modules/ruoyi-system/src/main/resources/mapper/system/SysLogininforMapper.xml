@@ -3,8 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.SysLogininforMapper">
-
-    <resultMap type="SysLogininfor" id="SysLogininforResult">
+    <resultMap type="com.ruoyi.system.domain.SysLogininfor" id="SysLogininforResult">
         <id property="infoId" column="info_id"/>
         <result property="userName" column="user_name"/>
         <result property="status" column="status"/>
@@ -13,12 +12,13 @@
         <result property="accessTime" column="access_time"/>
     </resultMap>
 
-    <insert id="insertLogininfor" parameterType="SysLogininfor">
+    <insert id="insertLogininfor" parameterType="com.ruoyi.system.domain.SysLogininfor">
         insert into sys_logininfor (user_name, status, ipaddr, msg, access_time)
         values (#{userName}, #{status}, #{ipaddr}, #{msg}, sysdate())
     </insert>
 
-    <select id="selectLogininforList" parameterType="SysLogininfor" resultMap="SysLogininforResult">
+    <select id="selectLogininforList" parameterType="com.ruoyi.system.domain.SysLogininfor"
+            resultMap="SysLogininforResult">
         select info_id, user_name, ipaddr, status, msg, access_time from sys_logininfor
         <where>
             <if test="ipaddr != null and ipaddr != ''">
@@ -30,10 +30,12 @@
             <if test="userName != null and userName != ''">
                 AND user_name like concat('%', #{userName}, '%')
             </if>
-            <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+            <if test="beginTime != null and beginTime != ''">
+                <!-- 开始时间检索 -->
                 and date_format(access_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
             </if>
-            <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+            <if test="endTime != null and endTime != ''">
+                <!-- 结束时间检索 -->
                 and date_format(access_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
             </if>
         </where>
@@ -50,5 +52,4 @@
     <update id="cleanLogininfor">
         truncate table sys_logininfor
     </update>
-
-</mapper> 
+</mapper>
