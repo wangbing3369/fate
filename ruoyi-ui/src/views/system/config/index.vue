@@ -57,8 +57,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['system:config:add']"
-        >新增
-        </el-button>
+        >新增</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -68,8 +67,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['system:config:edit']"
-        >修改
-        </el-button>
+        >修改</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -79,8 +77,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['system:config:remove']"
-        >删除
-        </el-button>
+        >删除</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -89,8 +86,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['system:config:export']"
-        >导出
-        </el-button>
+        >导出</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -99,20 +95,19 @@
           size="mini"
           @click="handleClearCache"
           v-hasPermi="['system:config:remove']"
-        >清理缓存
-        </el-button>
+        >清理缓存</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="configList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="参数主键" align="center" prop="configId"/>
-      <el-table-column label="参数名称" align="center" prop="configName" :show-overflow-tooltip="true"/>
-      <el-table-column label="参数键名" align="center" prop="configKey" :show-overflow-tooltip="true"/>
-      <el-table-column label="参数键值" align="center" prop="configValue"/>
-      <el-table-column label="系统内置" align="center" prop="configType" :formatter="typeFormat"/>
-      <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true"/>
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="参数主键" align="center" prop="configId" />
+      <el-table-column label="参数名称" align="center" prop="configName" :show-overflow-tooltip="true" />
+      <el-table-column label="参数键名" align="center" prop="configKey" :show-overflow-tooltip="true" />
+      <el-table-column label="参数键值" align="center" prop="configValue" />
+      <el-table-column label="系统内置" align="center" prop="configType" :formatter="typeFormat" />
+      <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -126,16 +121,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:config:edit']"
-          >修改
-          </el-button>
+          >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:config:remove']"
-          >删除
-          </el-button>
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -152,13 +145,13 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="参数名称" prop="configName">
-          <el-input v-model="form.configName" placeholder="请输入参数名称"/>
+          <el-input v-model="form.configName" placeholder="请输入参数名称" />
         </el-form-item>
         <el-form-item label="参数键名" prop="configKey">
-          <el-input v-model="form.configKey" placeholder="请输入参数键名"/>
+          <el-input v-model="form.configKey" placeholder="请输入参数键名" />
         </el-form-item>
         <el-form-item label="参数键值" prop="configValue">
-          <el-input v-model="form.configValue" placeholder="请输入参数键值"/>
+          <el-input v-model="form.configValue" placeholder="请输入参数键值" />
         </el-form-item>
         <el-form-item label="系统内置" prop="configType">
           <el-radio-group v-model="form.configType">
@@ -166,12 +159,11 @@
               v-for="dict in typeOptions"
               :key="dict.dictValue"
               :label="dict.dictValue"
-            >{{ dict.dictLabel }}
-            </el-radio>
+            >{{dict.dictLabel}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -183,7 +175,7 @@
 </template>
 
 <script>
-import {addConfig, clearCache, delConfig, getConfig, listConfig, updateConfig} from "@/api/system/config";
+import { listConfig, getConfig, delConfig, addConfig, updateConfig, clearCache } from "@/api/system/config";
 
 export default {
   name: "Config",
@@ -224,13 +216,13 @@ export default {
       // 表单校验
       rules: {
         configName: [
-          {required: true, message: "参数名称不能为空", trigger: "blur"}
+          { required: true, message: "参数名称不能为空", trigger: "blur" }
         ],
         configKey: [
-          {required: true, message: "参数键名不能为空", trigger: "blur"}
+          { required: true, message: "参数键名不能为空", trigger: "blur" }
         ],
         configValue: [
-          {required: true, message: "参数键值不能为空", trigger: "blur"}
+          { required: true, message: "参数键值不能为空", trigger: "blur" }
         ]
       }
     };
@@ -293,7 +285,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.configId)
-      this.single = selection.length != 1
+      this.single = selection.length!=1
       this.multiple = !selection.length
     },
     /** 修改按钮操作 */
@@ -307,7 +299,7 @@ export default {
       });
     },
     /** 提交按钮 */
-    submitForm: function () {
+    submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.configId != undefined) {
@@ -330,15 +322,15 @@ export default {
     handleDelete(row) {
       const configIds = row.configId || this.ids;
       this.$confirm('是否确认删除参数编号为"' + configIds + '"的数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function () {
-        return delConfig(configIds);
-      }).then(() => {
-        this.getList();
-        this.msgSuccess("删除成功");
-      })
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return delConfig(configIds);
+        }).then(() => {
+          this.getList();
+          this.msgSuccess("删除成功");
+        })
     },
     /** 导出按钮操作 */
     handleExport() {
