@@ -178,6 +178,9 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     @Transactional
     public int updateRole(SysRole role) {
+
+
+
         // 修改角色信息
         roleMapper.updateRole(role);
         // 删除角色与菜单关联

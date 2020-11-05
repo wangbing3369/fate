@@ -73,6 +73,15 @@ public class SysRole extends BaseEntity {
      */
     private boolean flag = false;
 
+    private Boolean newData = false;
+
+    public void setNewData(Boolean newData){
+        this.newData = newData;
+    }
+    public Boolean isNewData(){
+        return this.newData;
+    }
+
     /**
      * 菜单组
      */
