@@ -15,9 +15,12 @@
         ruoyi-modules-system系统模块
     </description>
 
-    <dependencies>
-
-        <!-- SpringCloud Ailibaba Nacos -->
+    <dependencies><!-- SpringCloud Ailibaba Nacos -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.16</version>
+        </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
