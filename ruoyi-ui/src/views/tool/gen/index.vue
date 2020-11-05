@@ -45,8 +45,7 @@
           size="mini"
           @click="handleGenTable"
           v-hasPermi="['tool:gen:code']"
-        >生成
-        </el-button>
+        >生成</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -55,8 +54,7 @@
           size="mini"
           @click="openImportTable"
           v-hasPermi="['tool:gen:import']"
-        >导入
-        </el-button>
+        >导入</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -66,8 +64,7 @@
           :disabled="single"
           @click="handleEditTable"
           v-hasPermi="['tool:gen:edit']"
-        >修改
-        </el-button>
+        >修改</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -77,8 +74,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['tool:gen:remove']"
-        >删除
-        </el-button>
+        >删除</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -87,7 +83,7 @@
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column label="序号" type="index" width="50" align="center">
         <template slot-scope="scope">
-          <span>{{ (queryParams.pageNum - 1) * queryParams.pageSize + scope.$index + 1 }}</span>
+          <span>{{(queryParams.pageNum - 1) * queryParams.pageSize + scope.$index + 1}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -111,8 +107,8 @@
         :show-overflow-tooltip="true"
         width="130"
       />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="160"/>
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="160"/>
+      <el-table-column label="创建时间" align="center" prop="createTime" width="160" />
+      <el-table-column label="更新时间" align="center" prop="updateTime" width="160" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -121,40 +117,35 @@
             icon="el-icon-view"
             @click="handlePreview(scope.row)"
             v-hasPermi="['tool:gen:preview']"
-          >预览
-          </el-button>
+          >预览</el-button>
           <el-button
             type="text"
             size="small"
             icon="el-icon-edit"
             @click="handleEditTable(scope.row)"
             v-hasPermi="['tool:gen:edit']"
-          >编辑
-          </el-button>
+          >编辑</el-button>
           <el-button
             type="text"
             size="small"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['tool:gen:remove']"
-          >删除
-          </el-button>
-          <el-button
+          >删除</el-button>
+		  <el-button
             type="text"
             size="small"
             icon="el-icon-refresh"
             @click="handleSynchDb(scope.row)"
             v-hasPermi="['tool:gen:edit']"
-          >同步
-          </el-button>
+          >同步</el-button>
           <el-button
             type="text"
             size="small"
             icon="el-icon-download"
             @click="handleGenTable(scope.row)"
             v-hasPermi="['tool:gen:code']"
-          >生成代码
-          </el-button>
+          >生成代码</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -178,18 +169,17 @@
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
-    <import-table ref="import" @ok="handleQuery"/>
+    <import-table ref="import" @ok="handleQuery" />
   </div>
 </template>
 
 <script>
-import {delTable, genCode, listTable, previewTable, synchDb} from "@/api/tool/gen";
+import { listTable, previewTable, delTable, genCode, synchDb } from "@/api/tool/gen";
 import importTable from "./importTable";
-import {downLoadZip} from "@/utils/zipdownload";
-
+import { downLoadZip } from "@/utils/zipdownload";
 export default {
   name: "Gen",
-  components: {importTable},
+  components: { importTable },
   data() {
     return {
       // 遮罩层
@@ -261,12 +251,12 @@ export default {
         this.msgError("请选择要生成的数据");
         return;
       }
-      if (row.genType === "1") {
+      if(row.genType === "1") {
         genCode(row.tableName).then(response => {
           this.msgSuccess("成功生成到自定义路径：" + row.genPath);
         });
       } else {
-        downLoadZip("/code/gen/batchGenCode?tables=" + tableNames, "ruoyi");
+          downLoadZip("/code/gen/batchGenCode?tables=" + tableNames, "ruoyi");
       }
     },
     /** 同步数据库操作 */
@@ -276,10 +266,10 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(function () {
-        return synchDb(tableName);
+      }).then(function() {
+          return synchDb(tableName);
       }).then(() => {
-        this.msgSuccess("同步成功");
+          this.msgSuccess("同步成功");
       })
     },
     /** 打开导入表弹窗 */
@@ -318,11 +308,11 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(function () {
-        return delTable(tableIds);
+      }).then(function() {
+          return delTable(tableIds);
       }).then(() => {
-        this.getList();
-        this.msgSuccess("删除成功");
+          this.getList();
+          this.msgSuccess("删除成功");
       })
     }
   }

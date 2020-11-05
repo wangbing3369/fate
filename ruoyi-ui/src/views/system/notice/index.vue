@@ -43,8 +43,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['system:notice:add']"
-        >新增
-        </el-button>
+        >新增</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -54,8 +53,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['system:notice:edit']"
-        >修改
-        </el-button>
+        >修改</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -65,15 +63,14 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['system:notice:remove']"
-        >删除
-        </el-button>
+        >删除</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="noticeList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="序号" align="center" prop="noticeId" width="100"/>
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="序号" align="center" prop="noticeId" width="100" />
       <el-table-column
         label="公告标题"
         align="center"
@@ -94,7 +91,7 @@
         :formatter="statusFormat"
         width="100"
       />
-      <el-table-column label="创建者" align="center" prop="createBy" width="100"/>
+      <el-table-column label="创建者" align="center" prop="createBy" width="100" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="100">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
@@ -108,16 +105,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:notice:edit']"
-          >修改
-          </el-button>
+          >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:notice:remove']"
-          >删除
-          </el-button>
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -136,7 +131,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="公告标题" prop="noticeTitle">
-              <el-input v-model="form.noticeTitle" placeholder="请输入公告标题"/>
+              <el-input v-model="form.noticeTitle" placeholder="请输入公告标题" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -158,8 +153,7 @@
                   v-for="dict in statusOptions"
                   :key="dict.dictValue"
                   :label="dict.dictValue"
-                >{{ dict.dictLabel }}
-                </el-radio>
+                >{{dict.dictLabel}}</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -179,7 +173,7 @@
 </template>
 
 <script>
-import {addNotice, delNotice, getNotice, listNotice, updateNotice} from "@/api/system/notice";
+import { listNotice, getNotice, delNotice, addNotice, updateNotice, exportNotice } from "@/api/system/notice";
 import Editor from '@/components/Editor';
 
 export default {
@@ -224,10 +218,10 @@ export default {
       // 表单校验
       rules: {
         noticeTitle: [
-          {required: true, message: "公告标题不能为空", trigger: "blur"}
+          { required: true, message: "公告标题不能为空", trigger: "blur" }
         ],
         noticeType: [
-          {required: true, message: "公告类型不能为空", trigger: "blur"}
+          { required: true, message: "公告类型不能为空", trigger: "blur" }
         ]
       }
     };
@@ -288,7 +282,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.noticeId)
-      this.single = selection.length != 1
+      this.single = selection.length!=1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -308,7 +302,7 @@ export default {
       });
     },
     /** 提交按钮 */
-    submitForm: function () {
+    submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.noticeId != undefined) {
@@ -331,15 +325,15 @@ export default {
     handleDelete(row) {
       const noticeIds = row.noticeId || this.ids
       this.$confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function () {
-        return delNotice(noticeIds);
-      }).then(() => {
-        this.getList();
-        this.msgSuccess("删除成功");
-      })
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return delNotice(noticeIds);
+        }).then(() => {
+          this.getList();
+          this.msgSuccess("删除成功");
+        })
     }
   }
 };

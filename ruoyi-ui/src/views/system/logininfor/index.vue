@@ -64,8 +64,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['system:logininfor:remove']"
-        >删除
-        </el-button>
+        >删除</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -74,8 +73,7 @@
           size="mini"
           @click="handleClean"
           v-hasPermi="['system:logininfor:remove']"
-        >清空
-        </el-button>
+        >清空</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -84,19 +82,18 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['system:logininfor:export']"
-        >导出
-        </el-button>
+        >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="list" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="访问编号" align="center" prop="infoId"/>
-      <el-table-column label="用户名称" align="center" prop="userName"/>
-      <el-table-column label="地址" align="center" prop="ipaddr" width="130" :show-overflow-tooltip="true"/>
-      <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat"/>
-      <el-table-column label="描述" align="center" prop="msg"/>
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="访问编号" align="center" prop="infoId" />
+      <el-table-column label="用户名称" align="center" prop="userName" />
+      <el-table-column label="地址" align="center" prop="ipaddr" width="130" :show-overflow-tooltip="true" />
+      <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat" />
+      <el-table-column label="描述" align="center" prop="msg" />
       <el-table-column label="访问时间" align="center" prop="accessTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.accessTime) }}</span>
@@ -115,7 +112,7 @@
 </template>
 
 <script>
-import {cleanLogininfor, delLogininfor, list} from "@/api/system/logininfor";
+import { list, delLogininfor, cleanLogininfor } from "@/api/system/logininfor";
 
 export default {
   name: "Logininfor",
@@ -188,28 +185,28 @@ export default {
     handleDelete(row) {
       const infoIds = row.infoId || this.ids;
       this.$confirm('是否确认删除访问编号为"' + infoIds + '"的数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function () {
-        return delLogininfor(infoIds);
-      }).then(() => {
-        this.getList();
-        this.msgSuccess("删除成功");
-      })
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return delLogininfor(infoIds);
+        }).then(() => {
+          this.getList();
+          this.msgSuccess("删除成功");
+        })
     },
     /** 清空按钮操作 */
     handleClean() {
-      this.$confirm('是否确认清空所有登录日志数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function () {
-        return cleanLogininfor();
-      }).then(() => {
-        this.getList();
-        this.msgSuccess("清空成功");
-      })
+        this.$confirm('是否确认清空所有登录日志数据项?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return cleanLogininfor();
+        }).then(() => {
+          this.getList();
+          this.msgSuccess("清空成功");
+        })
     },
     /** 导出按钮操作 */
     handleExport() {
