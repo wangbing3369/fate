@@ -63,6 +63,9 @@ public class SysRoleController extends BaseController {
     @Log(title = "角色管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysRole role) {
+        if(role.getRoleId() == null){
+            return AjaxResult.error("新增角色'" + role.getRoleName() + "'失败，角色编码不能为空");
+        }
         if (UserConstants.NOT_UNIQUE.equals(roleService.checkRoleNameUnique(role))) {
             return AjaxResult.error("新增角色'" + role.getRoleName() + "'失败，角色名称已存在");
         } else if (UserConstants.NOT_UNIQUE.equals(roleService.checkRoleKeyUnique(role))) {
@@ -80,14 +83,19 @@ public class SysRoleController extends BaseController {
     @Log(title = "角色管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysRole role) {
-        roleService.checkRoleAllowed(role);
-        if (UserConstants.NOT_UNIQUE.equals(roleService.checkRoleNameUnique(role))) {
-            return AjaxResult.error("修改角色'" + role.getRoleName() + "'失败，角色名称已存在");
-        } else if (UserConstants.NOT_UNIQUE.equals(roleService.checkRoleKeyUnique(role))) {
-            return AjaxResult.error("修改角色'" + role.getRoleName() + "'失败，角色权限已存在");
+
+        if(role.isNewData()){
+            return this.add(role);
+        }else{
+            roleService.checkRoleAllowed(role);
+            if (UserConstants.NOT_UNIQUE.equals(roleService.checkRoleNameUnique(role))) {
+                return AjaxResult.error("修改角色'" + role.getRoleName() + "'失败，角色名称已存在");
+            } else if (UserConstants.NOT_UNIQUE.equals(roleService.checkRoleKeyUnique(role))) {
+                return AjaxResult.error("修改角色'" + role.getRoleName() + "'失败，角色权限已存在");
+            }
+            role.setUpdateBy(SecurityUtils.getUsername());
+            return toAjax(roleService.updateRole(role));
         }
-        role.setUpdateBy(SecurityUtils.getUsername());
-        return toAjax(roleService.updateRole(role));
     }
 
     /**
