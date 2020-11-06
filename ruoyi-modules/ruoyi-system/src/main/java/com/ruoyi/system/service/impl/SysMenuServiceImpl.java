@@ -13,6 +13,7 @@ import com.ruoyi.system.mapper.SysMenuMapper;
 import com.ruoyi.system.mapper.SysRoleMapper;
 import com.ruoyi.system.mapper.SysRoleMenuMapper;
 import com.ruoyi.system.service.ISysMenuService;
+import com.ruoyi.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,11 @@ public class SysMenuServiceImpl implements ISysMenuService {
 
     @Autowired
     private SysRoleMenuMapper roleMenuMapper;
+
+    @Autowired
+    private ISysUserService userService;
+
+
 
     /**
      * 根据用户查询系统菜单列表
@@ -94,14 +100,34 @@ public class SysMenuServiceImpl implements ISysMenuService {
     @Override
     public List<SysMenu> selectMenuTreeByUserId(Long userId) {
         List<SysMenu> menus = null;
+
+        // 根据用户Id获取用户
+        SysUser user = userService.selectUserById(userId);
+
         if (SecurityUtils.isAdmin(userId)) {
             menus = menuMapper.selectMenuTreeAll();
         } else {
             menus = menuMapper.selectMenuTreeByUserId(userId);
         }
-        return getChildPerms(menus, 0);
+        return getChildPerms(menus, userService.getSystemId(user).intValue());
     }
 
+    /**
+     * 根据用户ID查询所在系统
+     *
+     * @param userId 用户名称
+     * @return 菜单列表
+     */
+    @Override
+    public List<SysMenu> selectMenuSysByUserId(Long userId) {
+        List<SysMenu> menus = null;
+        if (SecurityUtils.isAdmin(userId)) {
+            menus = menuMapper.selectMenuSysAll();
+        } else {
+            menus = menuMapper.selectMenuSysByUserId(userId);
+        }
+        return menus;
+    }
     /**
      * 根据角色ID查询菜单树信息
      *
@@ -296,8 +322,10 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     public String getRouterPath(SysMenu menu) {
         String routerPath = menu.getPath();
+        // 获取父级目录
+        SysMenu parentMenu = menuMapper.selectMenuById(menu.getParentId());
         // 非外链并且是一级目录（类型为目录）
-        if (0 == menu.getParentId().intValue() && UserConstants.TYPE_DIR.equals(menu.getMenuType())
+        if ("S".equals(parentMenu.getMenuType()) && UserConstants.TYPE_DIR.equals(menu.getMenuType())
                 && UserConstants.NO_FRAME.equals(menu.getIsFrame())) {
             routerPath = "/" + menu.getPath();
         }

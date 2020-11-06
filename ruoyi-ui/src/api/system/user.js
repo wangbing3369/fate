@@ -35,6 +35,14 @@ export function updateUser(data) {
     data: data
   })
 }
+// 修改当前系统
+export function editSystem(data) {
+  return request({
+    url: '/system/user/editSystem',
+    method: 'put',
+    data: data
+  })
+}
 
 // 删除用户
 export function delUser(userId) {

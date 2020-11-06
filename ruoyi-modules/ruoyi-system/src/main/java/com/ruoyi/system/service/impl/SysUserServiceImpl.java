@@ -7,6 +7,7 @@ import com.ruoyi.common.datascope.annotation.DataScope;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import com.ruoyi.system.api.domain.SysRole;
 import com.ruoyi.system.api.domain.SysUser;
+import com.ruoyi.system.domain.SysMenu;
 import com.ruoyi.system.domain.SysPost;
 import com.ruoyi.system.domain.SysUserPost;
 import com.ruoyi.system.domain.SysUserRole;
@@ -49,6 +50,8 @@ public class SysUserServiceImpl implements ISysUserService {
     @Autowired
     private ISysConfigService configService;
 
+    @Autowired
+    private SysMenuMapper menuMapper;
     /**
      * 根据条件分页查询用户列表
      *
@@ -217,6 +220,34 @@ public class SysUserServiceImpl implements ISysUserService {
         // 新增用户与岗位管理
         insertUserPost(user);
         return userMapper.updateUser(user);
+    }
+
+    @Override
+    public int updateSystem(SysUser user) {
+        if(user.getSystemId() == null || user.getSystemId() == 0){
+            return 0;
+        }
+        return userMapper.updateSystem(user);
+    }
+
+    @Override
+    public Long getSystemId(SysUser user) {
+        if(user.getSystemId() == null || user.getSystemId() == 0){
+            List<SysMenu> list = null;
+            if(SecurityUtils.isAdmin(user.getUserId())){
+                list = menuMapper.selectMenuSysAll();
+            }else{
+                list = menuMapper.selectMenuSysByUserId(user.getUserId());
+            }
+
+            if(list.size() > 0){
+                user.setSystemId(list.get(0).getMenuId());
+                return user.getSystemId();
+            }else {
+                return 0L;
+            }
+        }
+        return user.getSystemId();
     }
 
     /**

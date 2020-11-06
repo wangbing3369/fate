@@ -180,6 +180,14 @@ public class SysUserController extends BaseController {
     }
 
     /**
+     * 修改用户登录系统
+     */
+    @PreAuthorize(hasPermi = "system:user:edit")
+    @PutMapping("/editSystem")
+    public AjaxResult editSystem(@RequestBody SysUser user) {
+        return toAjax(userService.updateSystem(user));
+    }
+    /**
      * 删除用户
      */
     @PreAuthorize(hasPermi = "system:user:remove")

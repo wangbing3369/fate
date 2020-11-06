@@ -8,6 +8,13 @@ export function listMenu(query) {
     params: query
   })
 }
+// 查询菜单列表
+export function listMenuSys() {
+    return request({
+        url: '/system/menu/getMenuList',
+        method: 'get',
+    })
+}
 
 // 查询菜单详细
 export function getMenu(menuId) {

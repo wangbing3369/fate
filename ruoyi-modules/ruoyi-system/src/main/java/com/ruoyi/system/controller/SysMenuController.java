@@ -134,4 +134,16 @@ public class SysMenuController extends BaseController {
         List<SysMenu> menus = menuService.selectMenuTreeByUserId(userId);
         return AjaxResult.success(menuService.buildMenus(menus));
     }
+
+    /**
+     * 获取系统信息
+     *
+     * @return 路由信息
+     */
+    @GetMapping("getMenuList")
+    public AjaxResult getMenuList() {
+        Long userId = SecurityUtils.getUserId();
+        List<SysMenu> menus = menuService.selectMenuSysByUserId(userId);
+        return AjaxResult.success(menus);
+    }
 }

@@ -70,6 +70,8 @@ public interface ISysMenuService {
      */
     public List<SysMenu> buildMenuTree(List<SysMenu> menus);
 
+
+    public List<SysMenu> selectMenuSysByUserId(Long userId);
     /**
      * 构建前端所需要下拉树结构
      *

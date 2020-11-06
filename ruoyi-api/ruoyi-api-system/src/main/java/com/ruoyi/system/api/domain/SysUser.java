@@ -92,6 +92,11 @@ public class SysUser extends BaseEntity {
     private String delFlag;
 
     /**
+     * 当前用户登录系统
+     */
+    private Long systemId;
+
+    /**
      * 最后登录IP
      */
     @Excel(name = "最后登录IP", type = Type.EXPORT)
@@ -292,6 +297,14 @@ public class SysUser extends BaseEntity {
 
     public void setPostIds(Long[] postIds) {
         this.postIds = postIds;
+    }
+
+    public Long getSystemId() {
+        return systemId;
+    }
+
+    public void setSystemId(Long systemId) {
+        this.systemId = systemId;
     }
 
     @Override

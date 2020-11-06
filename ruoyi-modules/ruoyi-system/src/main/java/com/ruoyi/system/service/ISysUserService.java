@@ -97,6 +97,10 @@ public interface ISysUserService {
      */
     public int updateUser(SysUser user);
 
+    public int updateSystem(SysUser user);
+
+    public Long getSystemId(SysUser user);
+
     /**
      * 修改用户状态
      *
