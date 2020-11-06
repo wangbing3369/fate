@@ -115,6 +115,17 @@ public class SysMenuServiceImpl implements ISysMenuService {
     }
 
     /**
+     * 根据用户ID查询菜单树信息
+     *
+     * @param userId 用户ID
+     * @return 选中菜单列表
+     */
+    @Override
+    public List<Integer> selectMenuListByUserIdA(Long userId) {
+        return menuMapper.selectMenuListByUserIdA(userId);
+    }
+
+    /**
      * 构建前端路由所需要的菜单
      *
      * @param menus 菜单列表

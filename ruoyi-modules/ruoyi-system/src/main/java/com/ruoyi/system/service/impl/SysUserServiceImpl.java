@@ -189,6 +189,11 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     @Transactional
     public int insertUser(SysUser user) {
+        // 判断ID是否已存在
+        if (this.userMapper.selectUserById(user.getUserId()) != null) {
+            throw new CustomException("用户编码已存在");
+        }
+
         // 新增用户信息
         int rows = userMapper.insertUser(user);
         // 新增用户岗位关联

@@ -115,7 +115,9 @@ public class SysDept extends BaseEntity {
      */
     private List<SysDept> children = new ArrayList<>();
 
-
+    /**
+     * 判断是新增或修改
+     */
     private boolean createFlag;
 
 }
