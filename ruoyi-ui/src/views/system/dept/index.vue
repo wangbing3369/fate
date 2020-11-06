@@ -135,7 +135,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="编码" prop="deptId">
-                            <el-input v-model.number="form.deptId" placeholder="请输入编码" maxlength="50"/>
+                            <el-input v-model.number="form.deptId" placeholder="请输入编码" maxlength="50" :disabled="!createFlag"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">

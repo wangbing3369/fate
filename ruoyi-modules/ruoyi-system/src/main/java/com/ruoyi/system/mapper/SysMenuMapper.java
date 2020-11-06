@@ -115,7 +115,8 @@ public interface SysMenuMapper {
      */
     public SysMenu checkMenuNameUnique(@Param("menuName") String menuName, @Param("parentId") Long parentId);
 
-    List<SysMenu> selectMenuSysAll();
 
-    List<SysMenu> selectMenuSysByUserId(Long userId);
+    public List<SysMenu> selectMenuSysAll();
+
+    public List<SysMenu> selectMenuSysByUserId(Long userId);
 }

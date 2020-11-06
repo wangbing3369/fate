@@ -72,6 +72,18 @@ public class SysMenuController extends BaseController {
     }
 
     /**
+     * 加载用户对应的菜单列表树(单指 sys_user_menu 表)
+     */
+    @GetMapping(value = "/userMenuTreeSelect/{userId}")
+    public AjaxResult userMenuTreeSelect(@PathVariable("userId") Long userId) {
+        List<SysMenu> menus = menuService.selectMenuList(1L);
+        AjaxResult ajax = AjaxResult.success();
+        ajax.put("checkedKeys", menuService.selectMenuListByUserIdA(userId));
+        ajax.put("menus", menuService.buildMenuTreeSelect(menus));
+        return ajax;
+    }
+
+    /**
      * 新增菜单
      */
     @PreAuthorize(hasPermi = "system:menu:add")
