@@ -68,7 +68,6 @@ public interface SysMenuMapper {
 
     List<Integer> selectMenuListByUserIdA(@Param("userId") Long userId);
 
-
     /**
      * 根据菜单ID查询信息
      *
