@@ -66,6 +66,9 @@ public interface SysMenuMapper {
      */
     public List<Integer> selectMenuListByRoleId(@Param("roleId") Long roleId, @Param("menuCheckStrictly") boolean menuCheckStrictly);
 
+    List<Integer> selectMenuListByUserIdA(@Param("userId") Long userId);
+
+
     /**
      * 根据菜单ID查询信息
      *
