@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysUserMenuMapper">
+    <resultMap type="com.ruoyi.system.domain.SysUserMenu" id="SysUserMenuResult">
+        <result property="userId" column="user_id"/>
+        <result property="menuId" column="menu_id"/>
+    </resultMap>
+
+    <sql id="selectSysUserMenuVo">
+        select user_id, menu_id
+        from sys_user_menu
+    </sql>
+
+    <select id="selectSysUserMenuList" parameterType="com.ruoyi.system.domain.SysUserMenu"
+            resultMap="SysUserMenuResult">
+        <include refid="selectSysUserMenuVo"/>
+        <where>
+            <if test="userId != null ">
+                and user_id = #{userId}
+            </if>
+            <if test="menuId != null ">
+                and menu_id = #{menuId}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectSysUserMenuById" parameterType="Long" resultMap="SysUserMenuResult">
+        <include refid="selectSysUserMenuVo"/>
+        where user_id = #{userId}
+    </select>
+
+    <insert id="insertSysUserMenu" parameterType="com.ruoyi.system.domain.SysUserMenu">
+        insert into sys_user_menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="menuId != null">
+                menu_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="menuId != null">
+                #{menuId},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateSysUserMenu" parameterType="com.ruoyi.system.domain.SysUserMenu">
+        update sys_user_menu
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="menuId != null">
+                menu_id =
+                #{menuId},
+            </if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deleteSysUserMenuById" parameterType="Long">
+        delete
+        from sys_user_menu
+        where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteSysUserMenuByIds" parameterType="String">
+        delete from sys_user_menu where user_id in
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+</mapper>

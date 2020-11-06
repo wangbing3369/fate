@@ -140,30 +140,10 @@
 
                 <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="50" align="center"/>
-                    <el-table-column label="用户编号" align="center" prop="userId"/>
-                    <el-table-column label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true"/>
-                    <el-table-column label="用户昵称" align="center" prop="nickName" :show-overflow-tooltip="true"/>
-                    <el-table-column label="部门" align="center" prop="dept.deptName" :show-overflow-tooltip="true"/>
-                    <el-table-column label="手机号码" align="center" prop="phonenumber" width="120"/>
-                    <el-table-column label="状态" align="center">
-                        <template slot-scope="scope">
-                            <el-switch
-                                v-model="scope.row.status"
-                                active-value="0"
-                                inactive-value="1"
-                                @change="handleStatusChange(scope.row)"
-                            ></el-switch>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="创建时间" align="center" prop="createTime" width="160">
-                        <template slot-scope="scope">
-                            <span>{{ parseTime(scope.row.createTime) }}</span>
-                        </template>
-                    </el-table-column>
                     <el-table-column
                         label="操作"
                         align="center"
-                        width="160"
+                        width="300"
                         class-name="small-padding fixed-width"
                     >
                         <template slot-scope="scope">
@@ -192,6 +172,35 @@
                                 v-hasPermi="['system:user:resetPwd']"
                             >重置
                             </el-button>
+                            <el-button
+                                v-if="scope.row.userId !== 1"
+                                size="mini"
+                                type="text"
+                                icon="el-icon-circle-check"
+                                @click="handleUpdateAllot(scope.row)"
+                                v-hasPermi="['system:role:edit']"
+                            >分配权限
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="用户编号" align="center" prop="userId"/>
+                    <el-table-column label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true"/>
+                    <el-table-column label="用户昵称" align="center" prop="nickName" :show-overflow-tooltip="true"/>
+                    <el-table-column label="部门" align="center" prop="dept.deptName" :show-overflow-tooltip="true"/>
+                    <el-table-column label="手机号码" align="center" prop="phonenumber" width="120"/>
+                    <el-table-column label="状态" align="center">
+                        <template slot-scope="scope">
+                            <el-switch
+                                v-model="scope.row.status"
+                                active-value="0"
+                                inactive-value="1"
+                                @change="handleStatusChange(scope.row)"
+                            ></el-switch>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="创建时间" align="center" prop="createTime" width="160">
+                        <template slot-scope="scope">
+                            <span>{{ parseTime(scope.row.createTime) }}</span>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -351,6 +360,34 @@
                 <el-button @click="upload.open = false">取 消</el-button>
             </div>
         </el-dialog>
+        <!-- 分配权限对话框-->
+        <el-dialog :title="title" :visible.sync="open" width="500px" :close-on-click-modal="false" append-to-body>
+            <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+                <el-form-item label="菜单权限">
+                    <el-checkbox v-model="menuExpand" @change="handleCheckedTreeExpand($event, 'menu')">展开/折叠
+                    </el-checkbox>
+                    <el-checkbox v-model="menuNodeAll" @change="handleCheckedTreeNodeAll($event, 'menu')">全选/全不选
+                    </el-checkbox>
+                    <el-checkbox v-model="form.menuCheckStrictly" @change="handleCheckedTreeConnect($event, 'menu')">
+                        父子联动
+                    </el-checkbox>
+                    <el-tree
+                        class="tree-border"
+                        :data="menuOptions"
+                        show-checkbox
+                        ref="menu"
+                        node-key="id"
+                        :check-strictly="!form.menuCheckStrictly"
+                        empty-text="加载中，请稍后"
+                        :props="defaultProps"
+                    ></el-tree>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="submitForm">确 定</el-button>
+                <el-button @click="cancel">取 消</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -360,6 +397,8 @@ import {getToken} from "@/utils/auth";
 import {treeselect} from "@/api/system/dept";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import {getRole} from "@/api/system/role";
+import {roleMenuTreeselect} from "@/api/system/menu";
 
 export default {
     name: "User",
@@ -401,6 +440,12 @@ export default {
             // 角色选项
             roleOptions: [],
             createFlag: true,
+
+            menuExpand: false,
+            menuNodeAll: false,
+            // 菜单列表
+            menuOptions: [],
+
 
             // 表单参数
             form: {},
@@ -611,6 +656,31 @@ export default {
             }).catch(() => {
             });
         },
+        /** 分配权限操作 */
+        handleUpdateAllot(row) {
+            this.reset();
+            const roleId = row.roleId || this.ids
+            const roleMenu = this.getRoleMenuTreeselect(roleId);
+            // 设置默认打开为 第一标签
+            // this.roleEditSelect = 'second';
+            getRole(roleId).then(response => {
+                this.form = response.data;
+                this.open = true;
+                this.$nextTick(() => {
+                    roleMenu.then(res => {
+                        this.$refs.menu.setCheckedKeys(res.checkedKeys);
+                    });
+                });
+                this.title = "修改角色";
+            });
+        },
+        getRoleMenuTreeselect(roleId) {
+            return roleMenuTreeselect(roleId).then(response => {
+                this.menuOptions = response.menus;
+                return response;
+            });
+        },
+
         /** 提交按钮 */
         submitForm: function () {
             this.$refs["form"].validate(valid => {

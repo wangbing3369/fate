@@ -140,6 +140,14 @@
         order by m.parent_id, m.order_num
     </select>
 
+    <select id="selectMenuListByUserIdA" resultType="Integer">
+        select m.menu_id
+        from sys_menu m
+        left join sys_user_menu rm on m.menu_id = rm.menu_id
+        where rm.user_id = #{userId}
+        order by m.parent_id, m.order_num
+    </select>
+
     <select id="selectMenuPerms" resultType="String">
         select distinct m.perms
         from sys_menu m
